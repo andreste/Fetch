@@ -1,5 +1,6 @@
 package com.andreste.fetch.hilt
 
+import com.andreste.fetch.services.HiringService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -37,7 +38,7 @@ class RetrofitModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .baseUrl("https://playground.mockoon.com/")
+            .baseUrl("https://fetch-hiring.s3.amazonaws.com/")
             .client(okHttpClient)
             .build()
 
