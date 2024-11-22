@@ -20,7 +20,7 @@ sealed class ViewState {
 @HiltViewModel
 class HiringViewModel @Inject constructor(
     private val hiringRepository: HiringRepository
-): ViewModel() {
+) : ViewModel() {
 
     private var navController: NavController? = null
 
@@ -38,7 +38,11 @@ class HiringViewModel @Inject constructor(
             val response = hiringRepository.getItems()
             if (response.isSuccessful) {
                 response.body()?.let {
-                    _state.value = ViewState.Content(it)
+                    val sortedItems =
+                        it.sortedWith(compareBy<HiringItem> { it.listId }.thenBy { it.name })
+
+                    _state.value =
+                        ViewState.Content(sortedItems.filter { !it.name.isNullOrBlank() })
                 }
             } else {
                 _state.value = ViewState.Error("Could not get items")

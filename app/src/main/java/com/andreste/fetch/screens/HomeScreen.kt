@@ -43,20 +43,36 @@ fun HomeScreen(navController: NavController, viewModel: HiringViewModel) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No stocks found",
+                            text = "No items found",
                             modifier = Modifier.padding(16.dp),
                             textAlign = TextAlign.Center
                         )
                     }
 
                 } else {
+                    val groupedItems = state.list.groupBy { it.listId }
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxHeight()
                             .fillMaxWidth()
                     ) {
-                        items(state.list) {
-                            NotificationRow(it)
+                        groupedItems.forEach { (listId, items) ->
+                            item {
+                                Text(
+                                    text = "List ID: $listId",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color.LightGray)
+                                        .padding(8.dp),
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Start
+                                )
+                            }
+
+                            items(items) { hiringItem ->
+                                ItemRow(hiringItem)
+                            }
                         }
                     }
                 }
@@ -91,7 +107,7 @@ fun HomeScreen(navController: NavController, viewModel: HiringViewModel) {
 
 
 @Composable
-fun NotificationRow(item: HiringItem) {
+fun ItemRow(item: HiringItem) {
 
     Row(
         modifier = Modifier
